@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgentReady | ¿Tu web es visible para la IA?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --bg-card: #111118;
+            --bg-hover: #1a1a24;
+            --border: rgba(255,255,255,0.08);
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.5);
+            --text-dim: rgba(255,255,255,0.3);
+            --accent: #00d4aa;
+            --accent-dim: rgba(0,212,170,0.15);
+            --danger: #ff4757;
+            --warning: #ffa502;
+            --success: #2ed573;
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* NAV */
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--text); }
+
+        .nav-cta {
+            padding: 0.5rem 1.25rem;
+            background: var(--accent);
+            color: var(--bg);
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            text-decoration: none;
+            transition: opacity 0.3s;
+        }
+
+        .nav-cta:hover { opacity: 0.9; }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--accent-dim);
+            border: 1px solid rgba(0,212,170,0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--accent), #00a8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            margin: 0 auto 3rem;
+        }
+
+        /* INPUT */
+        .analyzer-box {
+            max-width: 700px;
+            margin: 0 auto 6rem;
+            padding: 0 2rem;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 0.5rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-dim);
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1rem;
+            padding: 0.75rem 1rem;
+            outline: none;
+            font-family: var(--font-sans);
+        }
+
+        .input-wrapper input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .input-wrapper button {
+            padding: 0.75rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.2s;
+            white-space: nowrap;
+        }
+
+        .input-wrapper button:hover {
+            opacity: 0.9;
+        }
+
+        .input-wrapper button:active {
+            transform: scale(0.98);
+        }
+
+        .input-wrapper button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* RESULTS */
+        .results {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+            display: none;
+        }
+
+        .results.active { display: block; }
+
+        .score-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .score-ring {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .score-ring svg {
+            transform: rotate(-90deg);
+        }
+
+        .score-ring-bg {
+            fill: none;
+            stroke: var(--border);
+            stroke-width: 8;
+        }
+
+        .score-ring-fill {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+
+        .score-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            font-weight: 500;
+        }
+
+        .score-label {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-status {
+            display: inline-block;
+            padding: 0.375rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .score-status.good {
+            background: rgba(46, 213, 115, 0.15);
+            color: var(--success);
+        }
+
+        .score-status.medium {
+            background: rgba(255, 165, 2, 0.15);
+            color: var(--warning);
+        }
+
+        .score-status.bad {
+            background: rgba(255, 71, 87, 0.15);
+            color: var(--danger);
+        }
+
+        /* CHECKS GRID */
+        .checks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .check-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .check-item:hover {
+            border-color: rgba(255,255,255,0.15);
+            transform: translateY(-2px);
+        }
+
+        .check-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .check-icon.pass {
+            background: rgba(46, 213, 115, 0.15);
+        }
+
+        .check-icon.fail {
+            background: rgba(255, 71, 87, 0.15);
+        }
+
+        .check-icon.warn {
+            background: rgba(255, 165, 2, 0.15);
+        }
+
+        .check-content h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .check-content p {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .check-status {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.5rem;
+        }
+
+        .check-status.pass { color: var(--success); }
+        .check-status.fail { color: var(--danger); }
+        .check-status.warn { color: var(--warning); }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+            display: none;
+        }
+
+        .loading.active { display: block; }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading p {
+            color: var(--text-muted);
+            font-size: 0.9375rem;
+        }
+
+        .loading-steps {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .loading-step {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.8125rem;
+            color: var(--text-dim);
+            transition: color 0.3s;
+        }
+
+        .loading-step.active {
+            color: var(--text);
+        }
+
+        .loading-step.done {
+            color: var(--success);
+        }
+
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--border);
+            transition: background 0.3s;
+        }
+
+        .loading-step.active .step-dot {
+            background: var(--accent);
+            animation: pulse 1.5s infinite;
+        }
+
+        .loading-step.done .step-dot {
+            background: var(--success);
+        }
+
+        /* FOOTER */
+        .footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer p {
+            font-size: 0.8125rem;
+            color: var(--text-dim);
+        }
+
+        .footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: var(--accent);
+        }
+
+        .check-item.locked {
+            opacity: 0.5;
+            position: relative;
+        }
+
+        .check-item.locked::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, var(--bg-card) 100%);
+            border-radius: 12px;
+        }
+
+        .check-item.locked .check-icon {
+            background: rgba(255,255,255,0.05);
+            color: var(--text-dim);
+        }
+
+        .check-item.locked .check-content h4,
+        .check-item.locked .check-content p {
+            color: var(--text-dim);
+        }
+
+        .unlock-card {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, var(--accent-dim), rgba(0,212,170,0.05));
+            border: 1px solid rgba(0,212,170,0.2);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .unlock-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0,212,170,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        .unlock-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .unlock-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .unlock-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .unlock-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .unlock-price {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .unlock-price span {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .unlock-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 600;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: opacity 0.3s, transform 0.2s;
+            margin-top: 1rem;
+        }
+
+        .unlock-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .unlock-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .unlock-features span {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        @media (max-width: 640px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding: 4rem 1.5rem 2rem;
+            }
+
+            .input-wrapper {
+                flex-direction: column;
+            }
+
+            .input-wrapper button {
+                width: 100%;
+            }
+
+            .score-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="#" class="logo">Agent<span>Ready</span></a>
+        <div class="nav-links">
+            <a href="#how">Cómo funciona</a>
+            <a href="#pricing">Precios</a>
+            <a href="#" class="nav-cta">Empezar gratis</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">Análisis gratuito en segundos</div>
+        <h1>¿Tu web es <span>visible para la IA</span>?</h1>
+        <p>Analiza cualquier web y descubre si los agentes de IA (ChatGPT, Claude, Gemini) pueden encontrar y entender tu contenido.</p>
+    </section>
+
+    <div class="analyzer-box">
+        <div class="input-wrapper">
+            <input type="url" id="urlInput" placeholder="https://tusitio.com" value="">
+            <button id="analyzeBtn" onclick="analyze()">Analizar web</button>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p>Analizando tu web...</p>
+        <div class="loading-steps">
+            <div class="loading-step" id="step1">
+                <div class="step-dot"></div>
+                <span>Comprobando accesibilidad</span>
+            </div>
+            <div class="loading-step" id="step2">
+                <div class="step-dot"></div>
+                <span>Analizando estructura</span>
+            </div>
+            <div class="loading-step" id="step3">
+                <div class="step-dot"></div>
+                <span>Evaluando contenido</span>
+            </div>
+            <div class="loading-step" id="step4">
+                <div class="step-dot"></div>
+                <span>Calculando puntuación</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="results" id="results">
+        <div class="score-card">
+            <div class="score-ring">
+                <svg width="160" height="160" viewBox="0 0 160 160">
+                    <circle class="score-ring-bg" cx="80" cy="80" r="70"/>
+                    <circle class="score-ring-fill" id="scoreRing" cx="80" cy="80" r="70"/>
+                </svg>
+                <div class="score-value" id="scoreValue">0</div>
+            </div>
+            <div class="score-label">Puntuación AI-Readiness</div>
+            <div class="score-status" id="scoreStatus">Analizando...</div>
+        </div>
+
+        <div class="checks-grid" id="checksGrid">
+            <!-- Se llena con JS -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>Hecho con 💚 por <a href="#">THE-KERN3L</a> · AgentReady © 2026</p>
+    </footer>
+
+    <script>
+        const API_URL = window.location.origin.includes('localhost') 
+            ? 'http://localhost:8000' 
+            : '/api';
+
+        async function analyze() {
+            const url = document.getElementById('urlInput').value;
+            const btn = document.getElementById('analyzeBtn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+
+            if (!url) {
+                alert('Por favor introduce una URL');
+                return;
+            }
+
+            // UI: loading state
+            btn.disabled = true;
+            btn.textContent = 'Analizando...';
+            results.classList.remove('active');
+            loading.classList.add('active');
+
+            // Simular pasos visuales
+            const steps = ['step1', 'step2', 'step3', 'step4'];
+            for (let i = 0; i < steps.length; i++) {
+                await new Promise(r => setTimeout(r, 400));
+                if (i > 0) {
+                    document.getElementById(steps[i-1]).classList.remove('active');
+                    document.getElementById(steps[i-1]).classList.add('done');
+                }
+                document.getElementById(steps[i]).classList.add('active');
+            }
+
+            try {
+                // LLAMADA REAL AL BACKEND
+                const response = await fetch(`${API_URL}/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: url })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Error en el análisis');
+                }
+
+                const data = await response.json();
+                showResults(data);
+
+            } catch (error) {
+                console.error(error);
+                alert('Error al analizar la web. Asegúrate de que el backend está corriendo en localhost:8000');
+            }
+
+            loading.classList.remove('active');
+            results.classList.add('active');
+            btn.disabled = false;
+            btn.textContent = 'Analizar web';
+        }
+
+        function showResults(data) {
+            const ring = document.getElementById('scoreRing');
+            const value = document.getElementById('scoreValue');
+            const status = document.getElementById('scoreStatus');
+            const grid = document.getElementById('checksGrid');
+            const score = data.score;
+
+            // Animar score
+            const circumference = 440;
+            const offset = circumference - (score / 100) * circumference;
+            
+            setTimeout(() => {
+                ring.style.strokeDashoffset = offset;
+            }, 100);
+
+            // Contador animado
+            let current = 0;
+            const timer = setInterval(() => {
+                current += 2;
+                if (current >= score) {
+                    current = score;
+                    clearInterval(timer);
+                }
+                value.textContent = current;
+            }, 20);
+
+            // Status
+            status.textContent = data.status;
+            if (score >= 80) {
+                status.className = 'score-status good';
+                ring.style.stroke = 'var(--success)';
+            } else if (score >= 60) {
+                status.className = 'score-status medium';
+                ring.style.stroke = 'var(--warning)';
+            } else {
+                status.className = 'score-status bad';
+                ring.style.stroke = 'var(--danger)';
+            }
+
+            // Construir HTML con checks reales del backend
+            const checks = data.checks;
+            const failedChecks = checks.filter(c => !c.pass_);
+            const freeFailed = failedChecks.filter(c => !c.locked).slice(0, 3);
+            const lockedFailed = failedChecks.filter(c => c.locked);
+            const lockedPreview = lockedFailed.slice(0, 3);
+
+            let html = '';
+
+            // Header
+            if (failedChecks.length > 0) {
+                html += `
+                    <div style="grid-column: 1 / -1; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">
+                            🔍 ${failedChecks.length} problemas detectados
+                        </h3>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">
+                            Análisis experto: estos son los problemas que impiden que los agentes de IA (ChatGPT, Claude, Gemini, Perplexity) encuentren y recomienden tu web.
+                        </p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">¡Tu web está optimizada para la IA!</h3>
+                        <p style="color: var(--text-muted);">No hemos detectado problemas. Tu web es visible para ChatGPT, Claude, Gemini y Perplexity.</p>
+                    </div>
+                `;
+            }
+
+            // Checks gratuitos fallidos
+            html += freeFailed.map(check => `
+                <div class="check-item fail-card">
+                    <div class="check-icon fail">✗</div>
+                    <div class="check-content">
+                        <h4>${check.icon} ${check.name}</h4>
+                        <p style="color: var(--text-muted); margin-bottom: 0.75rem;">${check.fail_desc}</p>
+                        <div style="background: rgba(255,71,87,0.1); border-left: 3px solid var(--danger); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.8125rem;">
+                            <strong style="color: var(--danger);">💡 Cómo arreglarlo: </strong>${check.fix}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Checks bloqueados fallidos (preview)
+            html += lockedPreview.map(check => `
+                <div class="check-item locked">
+                    <div class="check-icon">🔒</div>
+                    <div class="check-content">
+                        <h4>${check.icon} ${check.name}</h4>
+                        <p>${check.fail_desc.substring(0, 90)}...</p>
+                        <div class="check-status" style="color: var(--text-dim)">Bloqueado</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Si hay más bloqueados
+            const remainingLocked = lockedFailed.length - lockedPreview.length;
+            if (remainingLocked > 0) {
+                html += `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 1rem; color: var(--text-dim); font-size: 0.875rem;">
+                        ...y ${remainingLocked} problemas más ocultos
+                    </div>
+                `;
+            }
+
+            // CTA de pago
+            if (lockedFailed.length > 0) {
+                html += `
+                    <div class="unlock-card">
+                        <div class="unlock-content">
+                            <div class="unlock-icon">🔐</div>
+                            <h3>Arregla los ${lockedFailed.length} problemas restantes</h3>
+                            <p>Hemos detectado ${failedChecks.length} problemas en total. Desbloquea el análisis completo para ver todos los detalles, la guía paso a paso y el código exacto para solucionarlos.</p>
+                            <div class="unlock-price">9€<span>/mes</span></div>
+                            <a href="#" class="unlock-btn">Ver todas las soluciones</a>
+                            <div class="unlock-features">
+                                <span>✓ ${checks.length} checks expertos</span>
+                                <span>✓ Código listo para copiar</span>
+                                <span>✓ Reporte PDF</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+        }
+            // Checks - Análisis experto de la web
+            // SOLO se muestran los que FALLAN. Los que pasan no aparecen.
+            const allChecks = [
+                { 
+                    name: 'Acceso bloqueado a crawlers de IA', 
+                    icon: '🤖', 
+                    failDesc: 'Tu robots.txt bloquea el acceso a los crawlers de IA (ChatGPT-User, ClaudeBot, PerplexityBot). Estos bots no pueden leer tu contenido para recomendarlo.',
+                    fix: 'Edita robots.txt y añade: User-agent: ChatGPT-User, ClaudeBot, PerplexityBot → Allow: /',
+                    pass: score > 60 
+                },
+                { 
+                    name: 'Sin sitemap XML', 
+                    icon: '🗺️', 
+                    failDesc: 'No se detectó sitemap.xml. Los agentes de IA no pueden descubrir todas tus páginas, especialmente las que no están enlazadas internamente.',
+                    fix: 'Genera un sitemap.xml con todas tus URLs y súbelo a la raíz. Envíalo a Google Search Console.',
+                    pass: score > 70 
+                },
+                { 
+                    name: 'Sin datos estructurados Schema.org', 
+                    icon: '📋', 
+                    failDesc: 'No se encontró marcado Schema.org. La IA no distingue entre un precio, una fecha de evento, una valoración o un autor. Apareces como texto plano genérico.',
+                    fix: 'Añade JSON-LD con Schema.org: Organization, Product, Article, FAQPage o lo que corresponda a tu negocio.',
+                    pass: score > 75, 
+                    locked: true 
+                },
+                { 
+                    name: 'Contenido detrás de paywall', 
+                    icon: '🔓', 
+                    failDesc: 'Se detectó contenido que requiere registro o pago. Los agentes de IA no pueden acceder a él, así que nunca lo recomendarán en sus respuestas.',
+                    fix: 'Implementa el marcado isAccessibleForFree de Schema.org o crea una versión pública del contenido.',
+                    pass: score > 65, 
+                    locked: true 
+                },
+                { 
+                    name: 'Tiempo de carga excesivo', 
+                    icon: '⚡', 
+                    failDesc: 'El TTFB (Time to First Byte) supera los 800ms y el LCP (Largest Contentful Paint) los 2.5s. La IA penaliza webs lentas en sus rankings internos.',
+                    fix: 'Comprime imágenes con WebP/AVIF, activa compresión Brotli, usa caché de navegador y considera un CDN.',
+                    pass: score > 55, 
+                    locked: true 
+                },
+                { 
+                    name: 'Meta tags ausentes o duplicados', 
+                    icon: '🏷️', 
+                    failDesc: 'Faltan title únicos por página, meta description, o están duplicados. La IA usa estos campos para entender de qué trata cada página y para generar snippets.',
+                    fix: 'Cada página necesita: title único (50-60 chars), meta description única (150-160 chars), y canonical self-referencing.',
+                    pass: score > 50, 
+                    locked: true 
+                },
+                { 
+                    name: 'Open Graph incompleto', 
+                    icon: '📱', 
+                    failDesc: 'Faltan etiquetas Open Graph (og:title, og:description, og:image, og:url). Cuando la IA o un usuario comparte tu web, no aparece preview. Pierdes contexto y CTR.',
+                    fix: 'Añade en el <head>: og:title, og:description, og:image (1200x630px), og:url y og:type.',
+                    pass: score > 60, 
+                    locked: true 
+                },
+                { 
+                    name: 'URLs canónicas mal configuradas', 
+                    icon: '🔗', 
+                    failDesc: 'Se detectaron múltiples URLs con el mismo contenido sin etiqueta canonical. La IA no sabe cuál es la versión original y puede dividir la autoridad entre varias URLs.',
+                    fix: 'Añade <link rel="canonical" href="URL-original"> en todas las páginas. Usa 301 redirects para duplicados.',
+                    pass: score > 70, 
+                    locked: true 
+                },
+                { 
+                    name: 'Sin certificado HTTPS válido', 
+                    icon: '🔒', 
+                    failDesc: 'La conexión no es segura o el certificado SSL está caducado/firmado por una CA no confiable. La IA y los navegadores marcan tu web como no segura.',
+                    fix: 'Instala un certificado válido con Let\'s Encrypt (gratis) o Cloudflare (gratis). Configura redirect 301 de HTTP a HTTPS.',
+                    pass: score > 40, 
+                    locked: true 
+                },
+                { 
+                    name: 'No optimizado para móvil', 
+                    icon: '📱', 
+                    failDesc: 'El viewport no está configurado correctamente o hay elementos touch muy juntos. Google y la IA usan mobile-first indexing desde 2019.',
+                    fix: 'Usa meta viewport, media queries, font-size mínimo 16px en inputs, y espaciado táctil de al menos 48x48px.',
+                    pass: score > 45, 
+                    locked: true 
+                },
+                { 
+                    name: 'Contenido crítico en imágenes', 
+                    icon: '🖼️', 
+                    failDesc: 'Texto importante (precios, fechas, llamadas a la acción) está incrustado en imágenes sin alt text descriptivo. Los LLMs no pueden leer texto en imágenes.',
+                    fix: 'Usa texto real HTML para todo contenido importante. Añade alt text descriptivo a todas las imágenes.',
+                    pass: score > 55, 
+                    locked: true 
+                },
+                { 
+                    name: 'Enlaces rotos (404)', 
+                    icon: '🔗', 
+                    failDesc: 'Se encontraron enlaces internos o externos que devuelven 404. La IA interpreta esto como señal de baja calidad y abandono del sitio.',
+                    fix: 'Audita todos los enlaces con Screaming Frog o Ahrefs. Repara o elimina los rotos. Usa redirects 301 si cambiaste URLs.',
+                    pass: score > 50, 
+                    locked: true 
+                },
+                { 
+                    name: 'Sin breadcrumb navigation', 
+                    icon: '🧭', 
+                    failDesc: 'No se detectó navegación tipo breadcrumb. La IA no entiende la jerarquía de tu web ni la relación entre páginas padre e hijas.',
+                    fix: 'Implementa breadcrumbs visuales + marcado Schema.org BreadcrumbList en JSON-LD.',
+                    pass: score > 65, 
+                    locked: true 
+                },
+                { 
+                    name: 'Headings mal estructurados', 
+                    icon: '📐', 
+                    failDesc: 'Los H1-H6 no siguen jerarquía lógica, hay múltiples H1, o faltan headings. La IA usa la estructura de headings para entender el contenido y generar resúmenes.',
+                    fix: 'Un solo H1 por página, jerarquía descendente (H1→H2→H3), y headings descriptivos que resuman el contenido de cada sección.',
+                    pass: score > 55, 
+                    locked: true 
+                },
+                { 
+                    name: 'Sin datos de contacto estructurados', 
+                    icon: '📇', 
+                    failDesc: 'No se encontró Schema.org Organization o LocalBusiness con dirección, teléfono y email. La IA no puede mostrar tu negocio en respuestas locales.',
+                    fix: 'Añade JSON-LD con @type: Organization o LocalBusiness incluyendo name, address, telephone, email, url y sameAs (redes sociales).',
+                    pass: score > 60, 
+                    locked: true 
+                },
+            ];
+
+            // SOLO fallidos. Los que pasan no se muestran.
+            const failedChecks = allChecks.filter(c => !c.pass);
+            
+            // De los fallidos, separar gratis vs bloqueados
+            const freeFailed = failedChecks.filter(c => !c.locked).slice(0, 3); // max 3 gratis
+            const lockedFailed = failedChecks.filter(c => c.locked);
+            const lockedPreview = lockedFailed.slice(0, 3); // mostrar 3 bloqueados como teaser
+
+            let html = '';
+
+            // Header de problemas encontrados
+            if (failedChecks.length > 0) {
+                html += `
+                    <div style="grid-column: 1 / -1; margin-bottom: 1rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">
+                            🔍 ${failedChecks.length} problemas detectados
+                        </h3>
+                        <p style="color: var(--text-muted); font-size: 0.875rem;">
+                            Análisis experto: estos son los problemas que impiden que los agentes de IA (ChatGPT, Claude, Gemini, Perplexity) encuentren y recomienden tu web.
+                        </p>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🎉</div>
+                        <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">¡Tu web está optimizada para la IA!</h3>
+                        <p style="color: var(--text-muted);">No hemos detectado problemas. Tu web es visible para ChatGPT, Claude, Gemini y Perplexity.</p>
+                    </div>
+                `;
+            }
+
+            // Checks gratuitos fallidos (con guía completa de arreglo)
+            html += freeFailed.map(check => `
+                <div class="check-item fail-card">
+                    <div class="check-icon fail">✗</div>
+                    <div class="check-content">
+                        <h4>${check.icon} ${check.name}</h4>
+                        <p style="color: var(--text-muted); margin-bottom: 0.75rem;">${check.failDesc}</p>
+                        <div style="background: rgba(255,71,87,0.1); border-left: 3px solid var(--danger); padding: 0.75rem 1rem; border-radius: 0 6px 6px 0; font-size: 0.8125rem;">
+                            <strong style="color: var(--danger);">💡 Cómo arreglarlo: </strong>${check.fix}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Checks bloqueados fallidos (preview difuminada)
+            html += lockedPreview.map(check => `
+                <div class="check-item locked">
+                    <div class="check-icon">🔒</div>
+                    <div class="check-content">
+                        <h4>${check.icon} ${check.name}</h4>
+                        <p>${check.failDesc.substring(0, 90)}...</p>
+                        <div class="check-status" style="color: var(--text-dim)">Bloqueado</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // Si hay más bloqueados, indicar cuántos faltan
+            const remainingLocked = lockedFailed.length - lockedPreview.length;
+            if (remainingLocked > 0) {
+                html += `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 1rem; color: var(--text-dim); font-size: 0.875rem;">
+                        ...y ${remainingLocked} problemas más ocultos
+                    </div>
+                `;
+            }
+
+            // CTA de pago
+            if (lockedFailed.length > 0) {
+                html += `
+                    <div class="unlock-card">
+                        <div class="unlock-content">
+                            <div class="unlock-icon">🔐</div>
+                            <h3>Arregla los ${lockedFailed.length} problemas restantes</h3>
+                            <p>Hemos detectado ${failedChecks.length} problemas en total. Desbloquea el análisis completo para ver todos los detalles, la guía paso a paso y el código exacto para solucionarlos.</p>
+                            <div class="unlock-price">9€<span>/mes</span></div>
+                            <a href="#" class="unlock-btn">Ver todas las soluciones</a>
+                            <div class="unlock-features">
+                                <span>✓ ${allChecks.length} checks expertos</span>
+                                <span>✓ Código listo para copiar</span>
+                                <span>✓ Reporte PDF</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            grid.innerHTML = html;
+
+            grid.innerHTML = html;
+        }
+
+        // Enter key
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') analyze();
+        });
+    </script>
+</body>
+</html>
