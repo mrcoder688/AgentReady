@@ -10,7 +10,7 @@ from urllib.parse import urljoin, urlparse
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-nfrom pydantic import BaseModel
+from pydantic import BaseModel
 import httpx
 from bs4 import BeautifulSoup
 
